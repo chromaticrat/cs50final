@@ -1,0 +1,52 @@
+// Place all the styles related to the welcome controller here. 
+// They will automatically be included in application.css. 
+// You can use Sass (SCSS) here: http://sass-lang.com/ 
+
+body {
+    background-color: aliceblue;
+    font-family:"Lucida Grande", Arial, sans-serif;
+    text-align: center;
+    margin: 2em;
+}
+h1 {
+    background-color: black;
+    border-radius: 1em;
+    padding: 2%;
+    height: 89%;
+    width: 95%;
+    text-align: center;
+}
+div {
+    text-align: left;
+    color: white;
+    font-family:"Lucida Grande", Arial, sans-serif;
+    height: 89%;
+    width: 95%;
+    font-size: x-large;
+    background-color: black;
+    border-radius: 1em;
+    padding: 2%;
+}
+div#game {
+    color: green;
+    pointer-events: none;
+}
+div#speed, div#score {
+    color: black;
+    background-color: aliceblue;
+}
+.fast {
+    color: mediumvioletred;
+}
+.medium_fast {
+    color: orangered;
+}
+.medium {
+    color: yellow;
+}
+.medium_slow {
+    color: aquamarine;
+}
+.slow {
+    color: aliceblue;
+}
