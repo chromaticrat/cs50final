@@ -3,50 +3,84 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/ 
 
 body {
-    background-color: aliceblue;
+    background-color: white;
     font-family:"Lucida Grande", Arial, sans-serif;
     text-align: center;
-    margin: 2em;
+    margin-left: 10px;
+    margin-right: 10px;
 }
-h1 {
-    background-color: black;
-    border-radius: 1em;
-    padding: 2%;
-    height: 89%;
-    width: 95%;
-    text-align: center;
+p {
+	font-size: x-large;
+	color: darkgrey;
+	text-align: center;
+
 }
-div {
+.container {
+	height: 30px;
+	width: 100%;
+	position: relative;
+	border: 1em;
+	margin: 20px auto;
+}
+#speedbar {
+    background: -webkit-linear-gradient(left, violet, indigo, blue, green, yellow, orange, red); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(right, violet, indigo, blue, green, yellow, orange, red); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(right, violet, indigo, blue, green, yellow, orange, red); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to right, violet, indigo, blue, green, yellow, orange, red); /* Standard syntax (must be last) */
+	height: 20px;
+	width: 100%;
+	position: absolute;
+	border-radius: 1em;
+	margin: auto;
+    top: 0; bottom: 0; left: 0; right: 0;
+
+}
+#speedbar-cover {
+	background: white;
+    opacity: .9;
+    height: 20px;
+    width: 80%;
+    position: absolute;
+    margin: auto;
+    top: 0; bottom: 0; left: auto; right: 0;
+}
+#game {
+    color: #505050;
+    font-family: "Courier New", Courier, monospace;
+    font-size: large;
+    font-weight: 700;
     text-align: left;
-    color: white;
-    font-family:"Lucida Grande", Arial, sans-serif;
-    height: 89%;
-    width: 95%;
-    font-size: x-large;
-    background-color: black;
+    background-color: lightgrey;
     border-radius: 1em;
-    padding: 2%;
-}
-div#game {
-    color: green;
+    height: 400px;
+    padding: 1em;
     pointer-events: none;
 }
-div#speed, div#score {
-    color: black;
-    background-color: aliceblue;
+#score {
+    color: #505050;
+    text-align: center;
+    background-color: initial;
+    margin: 30px auto;
+    width: 100%;
+}
+.vfast {
+    color: red;
 }
 .fast {
-    color: mediumvioletred;
+	color: orange;
 }
 .medium_fast {
-    color: orangered;
-}
-.medium {
     color: yellow;
 }
+.medium {
+    color: green;
+}
 .medium_slow {
-    color: aquamarine;
+    color: blue;
 }
 .slow {
-    color: aliceblue;
+    color: indigo;
+}
+.vslow {
+	color: violet;
 }
