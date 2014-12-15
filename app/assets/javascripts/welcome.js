@@ -1,5 +1,5 @@
 // initialize variables
-var timer1; // total game time elapsed
+var timer1; // time at start of game
 var timer2; // time since last keydown
 var timer3; // time since started typing current word
 var previousTime; // timestamp of most recent keypress
@@ -11,19 +11,8 @@ var wordclass; // css class for completed word
 var keycount = 0; // total characters displayed in div#game
 var wpm = 0;
 var speeds = [];
-var GAME_END = 1000;
-
-// TODO: set size of typing box
-// this is not working and prevents game from starting
-// function boxSize(){
-// 	var boxHeight = 160000/window.innerWidth;
-// 	var boxHeightPx = str(boxHeight).concat("px");
-// 	alert(boxHeightPx);
-// 	$("div#game").css("height", boxHeightPx);
-// }
-// $(document).ready(boxSize());
-// $(window).resize(boxSize());
-
+var GAME_END = 50000; // 1 min is 60,000 ms
+var gameOver = false;
 
 // Helper function to start game
 function start(event) {
@@ -36,7 +25,9 @@ function start(event) {
 
 // TODO: when game ends, announce score and offer options
 function stopgame(){
-	alert("game over");
+	$("div#gameover").css("display", "initial");
+	$("div#shade").css("display", "initial");
+	gameOver = true;
 }
 
 // TODO: Helper function to handle backspace
@@ -47,9 +38,6 @@ function back(key) {
 	// shorten count of current word length and total length
 	wordlength --;
 	keycount --;
-	// TEST
-	//$("div#test").append("Called 'back()'. <br />Wordlength = "
-	//+wordlength+" and Keycount = "+keycount+"<br />");
 }
 
 // Helper function to update speedometer
@@ -57,12 +45,8 @@ function back(key) {
 function speedbar(){
  	var coverage;
  	// 0 wpm = 100% coverage --> 200 wpm = 0% coverage
-	if (wpm > 200) {
-		coverage = "0";
-	}
-	else {
-		coverage = (Math.abs(wpm/2 - 100)).toString();
-	}
+	if (wpm > 200) {coverage = "0";}
+	else {coverage = (Math.abs(wpm/2 - 100)).toString();}
 	var coverWidth = coverage.concat("%");
 	$("div#speedbar-cover").css("width", coverWidth);
 }
@@ -71,11 +55,11 @@ function speedbar(){
 function processSpeed(event) {
 	var now = event.timeStamp;
 	// Calculate speeds
-	timer2 = now - previousTime; // get this character speed
-	
+	var gametime = now - timer1; // get game time elapsed so far
+	timer2 = now - previousTime; // get this character's speed
+	if (gametime > GAME_END) { stopgame();}
 	// get words per min assuming every 5 characters is a word
 	wpm = Math.floor((keycount/5) / ((now - timer1)/60000));
-	
 	// space (32) or return (13) define word break for formatting
 	if (event.which == 32 || event.which == 13) {
 		wordspeed = Math.floor(60000/(now - timer3)); //wpm rate for just this word
@@ -112,7 +96,7 @@ function getcolor(){
 }
 
 // Helper function to style and display newKey input
-function display() { 
+function display() {
 	// if this is the first character of the game
 	if (timer2 == 0) {
 		$("div#game").append("<span class='current'>"+newKey+"</span>");
@@ -121,7 +105,7 @@ function display() {
 	else if (wordlength == 0) {
 		// Get color class for word based on speed
 		getcolor();
-		// apply color 
+		// apply color
 		$("span.current").append(newKey)
 			.removeClass("current")
 			.addClass(wordclass);
@@ -133,39 +117,29 @@ function display() {
 	}
 	// display speed
 	$("div#score").html("Average Speed: "+wpm+" wpm");
-	$("div#score").append("<br />Speed Of Most Recent Word: "+wordspeed+" wpm");
+	// $("div#score").append("<br />Current Pace: "+wordspeed+" wpm");
 }
 
-// Main Function: Handler for Keypress events in the window
-$(window).keypress(function (event) {    
-	// prevent default events so insertion point can't be changed by user
-	event.preventDefault();
-
-	// TODO: ignore sequential spaces/returns/tabs 
-	
-    // make a string from whatever key the user typed
-    newKey = String.fromCharCode(event.which);
-    
-    // if game already underway, keep playing
-    if (previousTime) {
-        // if the key pressed is Backspace
-    	//if (event.which == 8) { back(); }
-    	// if not Backspace
-		//else { 
-		processSpeed(event); 
-		//}
-    }
-    
-    // if this is the first character, start the game
-    else { start(event); }
-    // display keyboard input
-	display();
-    
-    // keep track of when most recent keyboard input received
-    previousTime = event.timeStamp; 
-    wordlength ++;
-	keycount ++;
-	if (keycount > gameEnd) { stopgame();}
+// Main Function: Handler for all keypress events in the window
+$(window).keypress(function (event) {
+		// prevent default events so insertion point can't be changed by user
+		event.preventDefault();
+	if (gameOver == false){
+		// make a string from whatever key the user typed
+	  newKey = String.fromCharCode(event.which);
+	  // if game already underway, keep playing or end
+	  if (previousTime) {
+			processSpeed(event);
+	  }
+	  // at the first character, start the game
+	  else { start(event); }
+	  // display keyboard input
+		display();
+	  // keep track of keyboard input/timing
+	  previousTime = event.timeStamp;
+	  wordlength ++;
+		keycount ++;
+	}
 });
 
 
@@ -194,9 +168,8 @@ $(window).keypress(function (event) {
 // 	speeds.push(timer2); // Add speed to array
 // 	avg = Math.floor(average(speeds)); // get avg of array (ms per key)
 // 	var wpm = Math.floor(1/((avg * 5)/60000)); // get wpm from ms per key
-	
+
     // TEST input
     //$("div#test").append("user typed "+event.which+" which is '"+newKey+"', ");
 
 	//$("div#speed").append(timer2+",  "); // TEST timer2
-

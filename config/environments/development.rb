@@ -12,7 +12,7 @@ Rails.application.configure do
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
-
+	
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 
@@ -34,4 +34,9 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+  
+  	# added per Devise install instructions
+	# remember to reset "host" when going to production
+	config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+
 end
